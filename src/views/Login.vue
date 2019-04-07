@@ -85,7 +85,7 @@
         <div class="footer-content b-font b-dis footer-content-font">
           <span class="footer-content-span">MONSTER DESIGN</span>
           <hr style="width:500px;margin-bottom:20px;border-color:#919294;">
-          <span class="footer-content-span">首页1</span>
+          <span class="footer-content-span">首页</span>
           <span class="footer-content-span">案例</span>
           <span class="footer-content-span">关于我们</span>
           <span class="footer-content-span">联系我们</span>
