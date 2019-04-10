@@ -1,0 +1,299 @@
+/*
+ * @Author: 李鹏
+ * @Date: 2019-04-08 20:05:17
+ * @Last Modified by: 吴占超
+ * @Last Modified time: 2019-04-09 21:18:16
+ * 登录样式配置文件
+ */
+
+//公共样式文件引入
+@import "base.less";
+
+// 1.公共样式--------------------------start
+
+// 1.公共样式--------------------------end
+
+//---------------------------------------------------------------------------------------
+
+// 2.局部样式--------------------------start
+
+// 2.1 head------------start
+.ant-layout-header {
+  background-color: @basecolor-black-01;
+  height: 64px;
+  border-bottom: 1px solid @basecolor-gray-01;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+//logo
+.logo {
+  background-image: url("@{baseimg-path}/monster.png");
+  width: 32px;
+  height: 32px;
+}
+
+//logo-name
+.logo-name {
+  margin-left: 10px;
+  flex: 1;
+  color: @basecolor-white-01;
+  font-size: @basefont-size-18;
+  font-family: @basefont-family;
+}
+
+//head:首页，案例，关于我们，联系我们
+.head-title {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-direction: row-reverse;
+  color: @basecolor-white-01;
+  font-size: @basefont-size-15;
+  font-family: @basefont-family;
+
+}
+
+.head-title span {
+  margin-left: 30px;
+}
+
+// 2.1 head------------end
+
+// 2.2 content--------------start
+
+//body-box
+.ant-layout-content {
+  padding: 74px 0 118px;
+  background-color: @basecolor-black-01;
+}
+
+//body-box
+.body-box {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 990px;
+  height: 338px;
+  margin: auto;
+}
+
+//诗 body-title
+.body-title {
+  height: 100%;
+  color: @basefont-color-white-02;
+}
+
+//标题-无题
+.body-title h1 {
+  color: inherit;
+  padding-left: 100px;
+}
+
+//诗
+.body-title p {
+  margin-top: 40px;
+  font-size: 19px;
+  display: block;
+}
+
+//登录窗体
+.body-module {
+  width: 380px;
+  height: 364px;
+  background-color: @basecolor-white-01;
+  padding-top: 22px;
+}
+
+.login-panel {
+  width: 330px;
+  min-height: 321px;
+  margin: 0 auto;
+  background-color: @basecolor-white-01;
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+//容器
+.login-panel-title {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 30px;
+}
+
+//“密码登录”
+.login-panel-title-01 {
+  font-size: @basefont-size-18;
+}
+
+//扫码登录
+.login-panel-title-02 {
+  position: relative;
+  float: left;
+  left: 40px;
+  width: 70px;
+  height: 28px;
+  padding: 5px 10px;
+  z-index: 1;
+  background-color: @basecolor-blue-02;
+  border: 1px solid @basecolor-blue-01;
+  color: @basecolor-blue-01;
+  font-size: @basefont-size-12;
+  font-weight: 400;
+}
+
+//扫码登录>arrow
+.login-panel-title-03 {
+  position: relative;
+  float: left;
+  left: 35px;
+  margin-top: 10px;
+  width: 9px;
+  height: 9px;
+  z-index: 1;
+  border: 1px solid;
+  border-color: @basecolor-blue-01;
+  border-bottom: 0px;
+  border-right: 0px;
+  background-color: @basecolor-blue-02;
+  transform: rotate(133deg);
+}
+
+//二维码qrcode
+.login-panel-title-04 {
+  position: relative;
+  float: right;
+  background-image: url("@{baseimg-path}/qkcode.png");
+  width: 32px;
+  height: 32px;
+}
+
+//qrcode-over
+.login-panel-title-05 {
+  position: relative;
+  float: right;
+  right: -22px;
+  top: 10px;
+  width: 42px;
+  height: 42px;
+  background-color: @basecolor-white-01;
+  transform: rotate(45deg);
+}
+
+//login-panel-user
+.login-panel-user {
+  font-size: @basefont-size-12;
+  height: 42px;
+  margin-bottom: 5px;
+}
+
+//login-panel-password
+.login-panel-password {
+  font-size: @basefont-size-12;
+  height: 42px;
+  margin-bottom: 5px;
+}
+
+//login-panel-button-primary
+.login-panel-button-primary {
+  font-size: @basefont-size-14;
+  font-family: @basefont-family;
+  width: 100%;
+  height: 42px;
+  background-color: @basecolor-blue-01;
+  border: none;
+}
+
+//login-panel-links
+.login-panel-links {
+  text-align: right;
+  width: 100%;
+}
+
+//login-panel-links a
+.login-panel-links a {
+  margin-left: 10px;
+  font-size: @basefont-size-12;
+  font-family: @basefont-family;
+  color: @basefont-color-gray-01;
+}
+
+//login-panel-third
+.login-panel-third {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+}
+
+//login-panel-third-01
+.login-panel-third-01 {
+  color: @basefont-color-black-01;
+  font-size: @basefont-size-12;
+  font-family: @basefont-family;
+}
+
+//login-panel-third-wechat
+.login-panel-third-wechat {
+  margin-left: 10px;
+  width: 22px;
+  height: 22px;
+}
+
+//login-panel-third-qq
+.login-panel-third-qq {
+  width: 22px;
+  height: 22px;
+  margin-left: 10px;
+}
+
+// 2.2 content--------------end
+
+// 2.3 footer---------------start
+.ant-layout-footer {
+  background-color: @basecolor-gray-02;
+  height: 350px;
+  text-align: center;
+}
+
+//footer-content
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  margin-top: 40px;
+  font-family: @basefont-family;
+  color: @basecolor-white-02;
+}
+
+//footer-content #title
+.footer-content #title {
+  font-size: @basefont-size-18;
+  text-align: center;
+}
+
+//.footer-content hr
+.footer-content hr {
+  width: 50%;
+  margin-bottom: 20px;
+  border-color: @basecolor-gray-01;
+}
+
+//footer-content-02
+.footer-content-02 {
+  display: flex;
+  justify-content: center;
+}
+
+//footer-content-02 span
+.footer-content-02 span {
+  font-size: @basefont-size-15;
+  margin-left: 30px;
+  cursor: pointer;
+}
+
+// 2.3 footer---------------end
+
+// 2.局部样式--------------------------end
