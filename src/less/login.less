@@ -2,70 +2,16 @@
  * @Author: 李鹏
  * @Date: 2019-04-08 20:05:17
  * @Last Modified by: 吴占超
- * @Last Modified time: 2019-04-09 21:18:16
+ * @Last Modified time: 2019-06-15 10:09:30
  * 登录样式配置文件
  */
 
-//公共样式文件引入
-@import "base.less";
-
-// 1.公共样式--------------------------start
-
-// 1.公共样式--------------------------end
-
-//---------------------------------------------------------------------------------------
-
-// 2.局部样式--------------------------start
-
-// 2.1 head------------start
-.ant-layout-header {
-  background-color: @basecolor-black-01;
-  height: 64px;
-  border-bottom: 1px solid @basecolor-gray-01;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-//logo
-.logo {
-  background-image: url("@{baseimg-path}/monster.png");
-  width: 32px;
-  height: 32px;
-}
-
-//logo-name
-.logo-name {
-  margin-left: 10px;
-  flex: 1;
-  color: @basecolor-white-01;
-  font-size: @basefont-size-18;
-  font-family: @basefont-family;
-}
-
-//head:首页，案例，关于我们，联系我们
-.head-title {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-direction: row-reverse;
-  color: @basecolor-white-01;
-  font-size: @basefont-size-15;
-  font-family: @basefont-family;
-
-}
-
-.head-title span {
-  margin-left: 30px;
-}
-
-// 2.1 head------------end
-
 // 2.2 content--------------start
 
-//body-box
-.ant-layout-content {
-  padding: 74px 0 118px;
+.content-body {
+  padding: 125px 0;
+  width: 100%;
+  height: 100%;
   background-color: @basecolor-black-01;
 }
 
@@ -100,6 +46,7 @@
 
 //登录窗体
 .body-module {
+
   width: 380px;
   height: 364px;
   background-color: @basecolor-white-01;
@@ -107,6 +54,7 @@
 }
 
 .login-panel {
+  justify-content: center;
   width: 330px;
   min-height: 321px;
   margin: 0 auto;
@@ -122,6 +70,7 @@
   justify-content: space-between;
   width: 100%;
   height: 30px;
+  margin-bottom: 20px;
 }
 
 //“密码登录”
@@ -134,7 +83,7 @@
   position: relative;
   float: left;
   left: 40px;
-  width: 70px;
+  width: 72px;
   height: 28px;
   padding: 5px 10px;
   z-index: 1;
@@ -142,7 +91,8 @@
   border: 1px solid @basecolor-blue-01;
   color: @basecolor-blue-01;
   font-size: @basefont-size-12;
-  font-weight: 400;
+  // font-weight: 400;
+
 }
 
 //扫码登录>arrow
@@ -183,18 +133,37 @@
   transform: rotate(45deg);
 }
 
+//login-panel-validate
+.login-panel-validate {
+  padding: 3px 5px;
+  width: 100%;
+  z-index: 1;
+  margin-bottom: 5px;
+  border: 1px solid @basecolor-oringe-01;
+  background: @basecolor-yellow-01;
+}
+
+//login-panel-validate span
+.login-panel-validate span {
+  font-family: @basefont-family;
+  font-size: @basefont-size-12;
+  margin-left: 7px;
+}
+
+.ant-form-item {
+  width: 100%;
+}
+
 //login-panel-user
 .login-panel-user {
   font-size: @basefont-size-12;
   height: 42px;
-  margin-bottom: 5px;
 }
 
 //login-panel-password
 .login-panel-password {
   font-size: @basefont-size-12;
   height: 42px;
-  margin-bottom: 5px;
 }
 
 //login-panel-button-primary
@@ -251,49 +220,3 @@
 }
 
 // 2.2 content--------------end
-
-// 2.3 footer---------------start
-.ant-layout-footer {
-  background-color: @basecolor-gray-02;
-  height: 350px;
-  text-align: center;
-}
-
-//footer-content
-.footer-content {
-  display: flex;
-  flex-direction: column;
-  margin-top: 40px;
-  font-family: @basefont-family;
-  color: @basecolor-white-02;
-}
-
-//footer-content #title
-.footer-content #title {
-  font-size: @basefont-size-18;
-  text-align: center;
-}
-
-//.footer-content hr
-.footer-content hr {
-  width: 50%;
-  margin-bottom: 20px;
-  border-color: @basecolor-gray-01;
-}
-
-//footer-content-02
-.footer-content-02 {
-  display: flex;
-  justify-content: center;
-}
-
-//footer-content-02 span
-.footer-content-02 span {
-  font-size: @basefont-size-15;
-  margin-left: 30px;
-  cursor: pointer;
-}
-
-// 2.3 footer---------------end
-
-// 2.局部样式--------------------------end

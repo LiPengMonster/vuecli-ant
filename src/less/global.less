@@ -1,0 +1,127 @@
+//基本颜色
+//1.蓝色
+@basecolor-blue-01: #00c1de;
+@basecolor-blue-02: #e6f9fc;
+//2.黑色
+@basecolor-black-01: #202325;
+@basecolor-black-02: #373d41;
+@basecolor-black-03: #001529;
+//3.灰色
+@basecolor-gray-01: #919294;
+@basecolor-gray-02: #424650;
+@basecolor-gray-03: #9b9ea0;
+@basecolor-gray-04: #f5f5f6;
+@basecolor-gray-05: #828282;
+@basecolor-gray-06: #eaedf1;
+
+//4.白色
+@basecolor-white-01: #ffffff;
+@basecolor-white-02: #cccccc;
+//5.橙色
+@basecolor-oringe-01: #ff934c;
+//6.黄色
+@basecolor-yellow-01: #fefcee;
+//6.红色
+@basecolor-red-01: #ff0000;
+
+//基本字体
+//字体大小
+@basefont-size-8: 8px;
+@basefont-size-10: 10px;
+@basefont-size-12: 12px;
+@basefont-size-13: 13px;
+@basefont-size-14: 14px;
+@basefont-size-15: 15px;
+@basefont-size-16: 16px;
+@basefont-size-18: 18px;
+//字体颜色
+@basefont-color-white-01: @basecolor-white-01;
+@basefont-color-white-02: @basecolor-white-02;
+@basefont-color-white-03: @basecolor-white-01;
+@basefont-color-black-01: @basecolor-black-02;
+@basefont-color-gray-01: @basecolor-gray-03;
+@basefont-color-gray-02: @basecolor-gray-05;
+//字体，默认第一个，没有的话从后边依次赋值
+@basefont-family: 'PingFangSC', 'helvetica neue', 'hiragino sans gb', 'arial', 'microsoft yahei ui', 'microsoft yahei', 'simsun', 'sans-serif' !important;
+
+
+//图片资源基本路径
+@baseimg-path: "../assets/images";
+
+
+body,
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+ul,
+ol,
+dl,
+li,
+dt,
+dd {
+  /* 默认有边距，都要清除 */
+  margin: 0;
+  padding: 0;
+  /*字体设置*/
+  // font-size: 14px;
+  font-family: @basefont-family  !important;
+  // color: #ccc;
+  /* 去掉列表的原点 */
+  list-style: none;
+  /* 默认鼠标 */
+  cursor: default;
+}
+
+
+div.ant-popover-arrow {
+
+  border-top-color: @basecolor-gray-02  !important;
+  border-left-color: @basecolor-gray-02  !important;
+
+}
+
+.ant-popover-title {
+  background-color: @basecolor-gray-02;
+}
+
+.ant-popover-inner-content {
+  background-color: @basecolor-gray-02;
+}
+
+.ant-layout {
+  background-color: @basecolor-white-01  !important;
+}
+
+.ant-layout-content {
+  background-color: @basecolor-white-01  !important;
+}
+
+.ant-modal-body {
+  padding: 10px 10px !important;
+}
+
+.ant-modal-title {
+  // font-size: 14px !important;
+  font-family: @basefont-family  !important;
+}
+
+.ant-upload.ant-upload-select-picture-card>.ant-upload {
+  padding: 2px !important;
+}
+
+.avatar-uploader>.ant-upload {
+  width: 86px !important;
+  height: 86px !important;
+}
+
+.ant-cascader-menu {
+  width: 300px;
+
+  .ant-cascader-menu-item {
+    float: left;
+  }
+}
