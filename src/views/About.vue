@@ -161,7 +161,6 @@ export default {
       return isJPG && isLt2M
     },
     customRequest(info) {
-      console.log(info)
       const formdata = new FormData()
       formdata.append('id', JSON.parse(this.$store.getters.userinfo).id)
       formdata.append('file', info.file)

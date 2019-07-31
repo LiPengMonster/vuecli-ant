@@ -98,7 +98,6 @@ router.beforeEach((to, from, next) => {
   // store.dispatch('commitremovetoken')
 
   if (to.meta.requiresAuth) { // 判断该路由是否需要登录权限
-
     if (store.getters.token) { // 通过vuex state获取当前的token是否存在store.state.token
       next() // 判断是否访问的登录页面，是的话跳转到欢迎页面
     } else {

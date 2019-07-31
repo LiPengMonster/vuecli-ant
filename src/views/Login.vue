@@ -91,98 +91,64 @@ export default {
     }
   },
   computed: {
-
     key() {
       return this.$route.path + Math.random()
     }
   },
   beforeCreate() { // 单页vue开发使用beforeCreate,初始化form
-    // console.log('数据库')
     this.form = this.$form.createForm(this, {
       onFieldsChange: (_, changedFields) => { // 添加字段改变事件
         this.$emit('change', changedFields)
-      },
-      mapPropsToFields: () => {
-        return {
-          username: this.$form.createFormField({
-            value: this.username
-          })
-        }
-      },
-      onValuesChange: (_, values) => {
-        // console.log(this.form)
-        // console.log(values)
       }
     })
   },
   mounted() {
-    // console.log(this.$route.params)
-    let _this = this // 声明一个变量指向Vue实例this，保证作用域一致
-    _this.username = _this.$route.params.username
-    // console.log(window.vm)
+    this.username = this.$route.params.username
   },
   methods: {
     handleSubmit(e) { // 登录提交
-      // console.log(this.form)
       e.preventDefault()
       this.form.validateFields((err, values) => { // 校验
         if (!err) { // 成功
-          // 提交登录
           this.confirmLogin(values)
         }
       })
     },
-    confirmLogin(values) { // 获取用户数据，密码数据,token?
-      console.log('sfsffsfsdf')
-      const _this = this
-
-      _this.axios(
-        {
-          url: '/login',
-          method: 'post',
-          data: {
-            username: values.username,
-            userpass: values.userpass,
-            identity_type: 'account'
-          },
-          transformRequest: [function (data) {
-            // Do whatever you want to transform the data
-            let ret = ''
-            for (let it in data) {
-              // 如果要发送中文 编码
-              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-            }
-            return ret
-          }],
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
+    confirmLogin(values) { // 登录
+      this.axios({
+        url: '/login',
+        method: 'post',
+        data: {
+          username: values.username,
+          userpass: values.userpass,
+          identity_type: 'account'
+        },
+        transformRequest: [function (data) {
+          // Do whatever you want to transform the data
+          let ret = ''
+          for (let it in data) {
+            // 如果要发送中文 编码
+            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
           }
-        })
-        .then(
-          (response) => {
-            // console.log('what happen')
-            console.log(response)
-
-            const token = response.data.token
-            const { id, nickname, avatar } = response.data.data.user
-            const { menu } = response.data.data
-            // console.log(response.data.data)
-            // 获取成功跳转主页面
-            // console.log(_this.$store)
-            _this.$store.dispatch('commitaddtoken', token)
-            _this.$store.dispatch('commitaddmenu', menu)
-
-            _this.$store.dispatch('commitadduserinfo', { id, nickname, avatar })
-              .then(() => {
-                console.log(_this.$store.getters.token)
-                // 跳转到欢迎页面
-                _this.$router.push({ name: 'about' })
-              })
-              .catch(() => {
-                console.log('false')
-              })
+          return ret
+        }],
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        }
+      }).then(
+        (response) => {
+          const token = response.data.token
+          const { id, nickname, avatar } = response.data.data.user
+          const { menu } = response.data.data
+          // 获取成功跳转主页面
+          this.$store.dispatch('commitaddtoken', token)
+          this.$store.dispatch('commitaddmenu', menu)
+          this.$store.dispatch('commitadduserinfo', { id, nickname, avatar }).then(() => {
+            this.$router.push({ name: 'about' })// 跳转到欢迎页面
+          }).catch((error) => {
+            console.log(error)
           })
-        .catch((error) => {
+        }).catch((error) => {
           console.log(error)
         })
     },
@@ -197,7 +163,6 @@ export default {
       console.log(e)
       this.visible = false
     }
-
   }
 }
 </script>

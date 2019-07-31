@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
-
 Vue.use(Vuex)
 
 export default new Vuex.Store({
@@ -26,12 +25,8 @@ export default new Vuex.Store({
       state.menu = undefined
       localStorage.removeItem('menuselectkeys')
       state.menuselectkeys = undefined
-
     },
     adduserinfo(state, userinfo) {
-      console.log('我是用户信息', userinfo)
-      console.log('我是用户信息类型', typeof userinfo)
-      console.log('我是用户昵称', userinfo.nickname)
       const {
         id,
         nickname,
