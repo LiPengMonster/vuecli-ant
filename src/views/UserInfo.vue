@@ -125,7 +125,6 @@ import moment from 'moment'
 export default {
   name: 'userinfo',
   data() {
-    console.log(1)
     return {
       formItemLayout: {
         wrapperCol: {
@@ -138,136 +137,108 @@ export default {
           xs: {
             span: 24,
             offset: 0,
-          }        }
+          }
+        }
       },
       province: [],
       region: [],
       city: [],
-      aa: false
+      pagestate: 'loading' //loading,loaded
     }
   },
-  beforeCreate() { // 单页vue开发使用beforeCreate,初始化form
-    const _this = this
-    _this.form = _this.$form.createForm(_this, {
+  created() {
+    this.form = this.$form.createForm(this, {
       onFieldsChange: (_, changedFields) => { // 添加字段改变事件
-        _this.$emit('change', changedFields)
-      },
-      mapPropsToFields: () => {
-        return {
-          // phone: this.$form.createFormField({
-          //   value: this.phone
-          // })
-        }
-      },
-      onValuesChange: (_, values) => {
-        // console.log(values)
+        this.$emit('change', changedFields)
       }
     })
-  },
-  mounted() {
-    const _this = this
     // 初始化省市区级联下拉数据，方案，先初始化省份，通过选择省份数据再次加载子集数据
-    const id = JSON.parse(this.$store.getters.userinfo).id
+    let iniProvince = this.axios.get( // 获取用户数据
+      '/syscity', {
+        params: { pid: 0, limit: 100, offset: 0 }
+      }).then((response) => {
+        this.province = response.data.rows
+      }).catch((error) => {
+        console.log(error)
+      })
 
-    let p1 =
-      _this.axios( // 获取用户数据
-        {
+    // 先判断是否存在数据，不存在，默认只查询省数据，end
+    const id = JSON.parse(this.$store.getters.userinfo).id
+    // 判断如果存在则先查询省数据，根据用户省数据查询市数据，根据用户市数据查询区数据
+    if (id) {
+      let iniUserInfo = iniProvince.then(() => {
+        return this.axios({ // 获取用户数据
           url: '/users/' + id,
-          method: 'get'        })
-        .then(function (response) {
+          method: 'get'
+        }).then((response) => {
           let { id, nickname, sex, phone, email, birthday, province, region, city } = response.data
           birthday = moment(birthday, 'YYYY-MM-DD')
-          _this.form.setFieldsValue({ id, nickname, sex, phone, email, birthday })
+          this.form.setFieldsValue({ id, nickname, sex, phone, email, birthday })
+          this.$refs.province.setValue([province])
           return { province, region, city }
-        }).catch(function (error) {
+        }).catch((error) => {
           return error
         })
+      }).catch((error) => console.log(error))
 
-    let p2 = Promise.race([p1]).then((result) => {
-      // console.log('省', result)
-      _this.axios.get( // 获取用户数据
-        '/syscity', {
-          params: { pid: 0, limit: 100, offset: 0 }
-        })
-        .then(function (response) {
-          console.log('省')
-          console.log(response.data)
-          _this.province = response.data.rows
-          _this.$refs.province.setValue([result.province])
-        }).catch(function (error) {
-          console.log(error)
-        })
-      return result
-    }).catch((error) => {
-      console.log(error)  // 打开的是 'failed'
-    })
-    let p3 = Promise.race([p2]).then((result) => {
-      // console.log('市', result)
-      _this.axios.get( // 获取用户数据
-        '/syscity', {
-          params: { pid: result.province, limit: 100, offset: 0 }
-        })
-        .then(function (response) {
-          _this.region = response.data.rows
-          _this.$refs.region.setValue([result.region])
-        }).catch(function (error) {
-          console.log(error)
-        })
-      return result
-    }).catch((error) => {
-      console.log(error)  // 打开的是 'failed'
-    })
-    Promise.race([p3]).then((result) => {
-      // console.log('县', result)
-      _this.axios.get( // 获取用户数据
-        '/syscity', {
-          params: { pid: result.region, limit: 100, offset: 0 }
-        })
-        .then(function (response) {
-          _this.city = response.data.rows
-          _this.$refs.city.setValue([result.city])
-        }).catch(function (error) {
-          console.log(error)
-        })
-    }).catch((error) => {
-      console.log(error)  // 打开的是 'failed'
-    })
+      let iniRegion = iniUserInfo.then((result) => { // 获取市
+        this.axios.get(
+          '/syscity', {
+            params: { pid: result.province, limit: 100, offset: 0 }
+          })
+          .then((response) => {
+            this.region = response.data.rows
+            this.$refs.region.setValue([result.region])
+          }).catch((error) => {
+            console.log(error)
+          })
+        return result
+      }).catch((error) => console.log(error))
+
+      iniRegion.then((result) => { // 获取区
+        this.axios.get(
+          '/syscity', {
+            params: { pid: result.region, limit: 100, offset: 0 }
+          })
+          .then((response) => {
+            this.city = response.data.rows
+            this.$refs.city.setValue([result.city])
+            // console.log('区', [result.city])
+          }).catch((error) => {
+            console.log(error)
+          })
+      }).catch(error => console.log(error))
+    }
+    this.pagestate = 'loaded'
   },
   methods: {
     handleSubmit(e) {
       e.preventDefault()
       this.form.validateFields((err, values) => { // 校验
         if (!err) { // 成功
-          // 提交保存
-          // 服务器校验是否重复
           this.confirmRegister(values)
         }
       })
     },
     moment,
     provinceChange(value) {
-
-      const _this = this
-      // console.log(value[0])
-      //清空市，区value
-      _this.$refs.region.setValue([undefined])
-      _this.$refs.city.setValue([undefined])
-
-      _this.axios.get( // 获取用户数据
+      if (this.pagestate === 'loading')
+        return
+      this.$refs.region.setValue([undefined])//清空市，区value
+      this.$refs.city.setValue([undefined])
+      this.axios.get( // 获取用户数据
         '/syscity', {
           params: { pid: value[0], limit: 100, offset: 0 }
         })
-        .then(function (response) {
-          // console.log('省')
-          // console.log(response.data)
-          _this.region = response.data.rows
-          // _this.$refs.region.setValue([response.data.rows[0].id])
-        }).catch(function (error) {
+        .then((response) => {
+          this.region = response.data.rows
+        }).catch((error) => {
           console.log(error)
         })
     },
     regionChange(value) {
-
+      if (this.pagestate === 'loading')
+        return
       this.$refs.city.setValue([undefined])
       this.axios.get( // 获取用户数据
         '/syscity', {
@@ -275,12 +246,12 @@ export default {
         })
         .then((response) => {
           this.city = response.data.rows
-          // _this.$refs.city.setValue([response.data.rows[0].id])
-        }).catch(function (error) {
+        }).catch((error) => {
           console.log(error)
         })
     },
     cityChange(value) {
+      // console.log('区', value)
     },
     confirmRegister(values) {
       this.axios.patch(
@@ -292,14 +263,12 @@ export default {
           province: values.province[0],
           region: values.region[0],
           city: values.city[0]
-        }
-      ).then((response) => {
-        console.log(response)// 登录成功，跳转到欢迎页面
-        this.$Modal.success({
-          title: '信息提示',
-          content: '成功'
+        }).then((response) => {
+          this.$Modal.success({
+            title: '信息提示',
+            content: '成功'
+          })
         })
-      })
         .catch((error) => {
           console.log(error)
         })

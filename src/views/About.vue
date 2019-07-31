@@ -67,10 +67,8 @@
   </div>
 </template>
 <script>
-
 import reqwest from 'reqwest'
-console.log('捡来了')
-// import _ from 'lodash'
+
 function getBase64(img, callback) {
   const reader = new FileReader()
   reader.addEventListener('load', () => callback(reader.result))
@@ -92,7 +90,6 @@ export default {
       // headers: {
       //   'Authorization': this.$store.getters.token },
       // pdata: { id: this.$store.getters.userinfo.id }
-
     }
   },
   mounted() {
@@ -102,9 +99,7 @@ export default {
     })
   },
   methods: {
-    // 获取用户数据，密码数据,token?
     submit() {
-
     },
     handleClick(e) {
       console.log('click ', e)
@@ -134,7 +129,6 @@ export default {
       this.visible = true
     },
     handleOk(e) {
-      console.log(e)
       this.visible = false
     },
     callback(key) {
@@ -151,8 +145,6 @@ export default {
           this.loading = false
         }
         )
-        // console.log('info.file.response')
-        // console.log(info.file.response)
         let { id, nickname, avatar } = info.file.response
         this.$store.dispatch('commitadduserinfo', { id, nickname, avatar })
       }
@@ -173,17 +165,15 @@ export default {
       const formdata = new FormData()
       formdata.append('id', JSON.parse(this.$store.getters.userinfo).id)
       formdata.append('file', info.file)
-      const _this = this
-      _this.axios(
-        {
-          url: '/uploadfile',
-          method: 'post',
-          data: formdata        })
-        .then(function (response) {
-          info.onSuccess(response.data)
-        }).catch(function (error) {
-          info.onError(error)
-        })
+      this.axios({
+        url: '/uploadfile',
+        method: 'post',
+        data: formdata
+      }).then((response) => {
+        info.onSuccess(response.data)
+      }).catch((error) => {
+        info.onError(error)
+      })
     }
   }
 }

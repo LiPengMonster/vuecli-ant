@@ -38,7 +38,6 @@
       </a-layout>
       <layoutfooter></layoutfooter>
     </a-layout>
-    {{menu}}
   </div>
 </template>
 
@@ -84,16 +83,15 @@ export default {
     }
   },
   created() {
-    const _this = this
     //在页面刷新时将vuex里的信息保存到sessionStorage里
     // 判断是否有menu数据,没有则查询后台,有则不处理
     if (this.token && !this.menu) {
-      _this.axios.get('/menu')
-        .then(response => _this.$store.dispatch("commitaddmenu", response.data.rows)).
+      this.axios.get('/menu')
+        .then(response => this.$store.dispatch("commitaddmenu", response.data.rows)).
         catch(error => console.log(error))
     }
-    if (_this.token && localStorage.getItem('menuselectkeys')) {
-      _this.$store.dispatch("commitaddmenuselectkeys", localStorage.getItem('menuselectkeys'))
+    if (this.token && localStorage.getItem('menuselectkeys')) {
+      this.$store.dispatch("commitaddmenuselectkeys", localStorage.getItem('menuselectkeys'))
     }
   },
   computed: {
