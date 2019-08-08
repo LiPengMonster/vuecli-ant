@@ -143,22 +143,18 @@ export default {
       province: [],
       region: [],
       city: [],
-      pagestate: 'loading' //loading,loaded
+      pagestate: 'loading', //loading,loaded
+      form: this.$form.createForm(this)
     }
   },
   created() {
-    this.form = this.$form.createForm(this, {
-      onFieldsChange: (_, changedFields) => { // 添加字段改变事件
-        this.$emit('change', changedFields)
-      }
-    })
     // 初始化省市区级联下拉数据，方案，先初始化省份，通过选择省份数据再次加载子集数据
-    let iniProvince = this.axios.get( // 获取用户数据
+    let iniProvince = this.axios.get( // 获取省数据
       '/syscity', {
         params: { pid: 0, limit: 100, offset: 0 }
-      }).then((response) => {
-        this.province = response.data.rows
-      }).catch((error) => {
+      }).then(result => {
+        this.province = result.rows
+      }).catch(error => {
         console.log(error)
       })
 
@@ -167,49 +163,45 @@ export default {
     // 判断如果存在则先查询省数据，根据用户省数据查询市数据，根据用户市数据查询区数据
     if (id) {
       let iniUserInfo = iniProvince.then(() => {
-        return this.axios({ // 获取用户数据
-          url: '/users/' + id,
-          method: 'get'
-        }).then((response) => {
-          let { id, nickname, sex, phone, email, birthday, province, region, city } = response.data
+        return this.axios.get('/users/' + id).then(result => { // 获取用户数据
+          let { id, nickname, sex, phone, email, birthday, province, region, city } = result
           birthday = moment(birthday, 'YYYY-MM-DD')
           this.form.setFieldsValue({ id, nickname, sex, phone, email, birthday })
           this.$refs.province.setValue([province])
           return { province, region, city }
-        }).catch((error) => {
+        }).catch(error => {
           return error
         })
-      }).catch((error) => console.log(error))
+      }).catch(error => console.log(error))
 
-      let iniRegion = iniUserInfo.then((result) => { // 获取市
+      let iniRegion = iniUserInfo.then(prcResult => { // 获取市
         this.axios.get(
           '/syscity', {
-            params: { pid: result.province, limit: 100, offset: 0 }
+            params: { pid: prcResult.province, limit: 100, offset: 0 }
           })
-          .then((response) => {
-            this.region = response.data.rows
-            this.$refs.region.setValue([result.region])
-          }).catch((error) => {
+          .then(result => {
+            this.region = result.rows
+            this.$refs.region.setValue([prcResult.region])
+          }).catch(error => {
             console.log(error)
           })
-        return result
-      }).catch((error) => console.log(error))
+        return prcResult
+      }).catch(error => console.log(error))
 
-      iniRegion.then((result) => { // 获取区
+      iniRegion.then(prcResult => { // 获取区
         this.axios.get(
           '/syscity', {
-            params: { pid: result.region, limit: 100, offset: 0 }
+            params: { pid: prcResult.region, limit: 100, offset: 0 }
           })
-          .then((response) => {
-            this.city = response.data.rows
-            this.$refs.city.setValue([result.city])
-            // console.log('区', [result.city])
-          }).catch((error) => {
+          .then(result => {
+            this.city = result.rows
+            this.$refs.city.setValue([prcResult.city])
+            this.pagestate = 'loaded'
+          }).catch(error => {
             console.log(error)
           })
       }).catch(error => console.log(error))
     }
-    this.pagestate = 'loaded'
   },
   methods: {
     handleSubmit(e) {
@@ -230,9 +222,9 @@ export default {
         '/syscity', {
           params: { pid: value[0], limit: 100, offset: 0 }
         })
-        .then((response) => {
-          this.region = response.data.rows
-        }).catch((error) => {
+        .then(result => {
+          this.region = result.rows
+        }).catch(error => {
           console.log(error)
         })
     },
@@ -244,9 +236,9 @@ export default {
         '/syscity', {
           params: { pid: value[0], limit: 100, offset: 0 }
         })
-        .then((response) => {
-          this.city = response.data.rows
-        }).catch((error) => {
+        .then(result => {
+          this.city = result.rows
+        }).catch(error => {
           console.log(error)
         })
     },
@@ -263,13 +255,10 @@ export default {
           province: values.province[0],
           region: values.region[0],
           city: values.city[0]
-        }).then((response) => {
-          this.$Modal.success({
-            title: '信息提示',
-            content: '成功'
-          })
+        }).then(result => {
+          this.$message.success('保存成功')
         })
-        .catch((error) => {
+        .catch(error => {
           console.log(error)
         })
     }

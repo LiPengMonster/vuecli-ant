@@ -1,6 +1,6 @@
 <template>
   <div class="content-body">
-    <img src="../assets/images/404.png">
+    <img src="../assets/images/404.png" />
   </div>
 </template>
 <script>
@@ -16,6 +16,6 @@ export default {
   justify-content: center;
   background-color: @basecolor-white-01;
   width: 100%;
-  height: 100%;
+  min-height: 580px;
 }
 </style>

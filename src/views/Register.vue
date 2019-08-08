@@ -98,108 +98,30 @@ export default {
   data() {
     return {
       regular: regular,
-      form: this.form
+      form: this.$form.createForm(this)
     }
-  },
-  beforeCreate() { // 单页vue开发使用beforeCreate,初始化form
-    this.form = this.$form.createForm(this, {
-      onFieldsChange: (_, changedFields) => { // 添加字段改变事件
-        this.$emit('change', changedFields)
-      },
-      mapPropsToFields: () => {
-        return {
-
-          username: this.$form.createFormField({
-            value: this.username
-          })
-        }
-      },
-      onValuesChange: (_, values) => {
-        console.log(values)
-        // Synchronize to vuex store in real time
-        // this.$store.commit('update', values)
-      }
-    })
   },
   methods: {
     handleSubmit(e) { // 注册提交
       e.preventDefault()
       this.form.validateFields((err, values) => { // 校验
-        if (!err) { // 成功
-          // 提交保存
-          // 服务器校验是否重复
-          this.confirmRegister(values)
-        }
+        !err && this.confirmRegister(values)  // 成功
       })
     },
     compareToFirstPassword(rule, value, callback) { // 确认密码校验
-      const form = this.form
-      if (value && value !== form.getFieldValue('userpass')) {
-        callback(new Error('两次密码输入不一致'))
-      } else {
-        callback()
-      }
-    },
-    validateToNextPassword(rule, value, callback) { // 密码修改后校验确认密码
-      const form = this.form
-      if (value) {
-        form.validateFields(['confirmpass'], { force: true })
-      }
+      value && value !== this.form.getFieldValue('userpass') && callback(new Error('两次密码输入不一致'))
       callback()
     },
-    checkaccount() {
-      const username = this.form.getFieldValue('username')
-      const form = this.form
-      const usererror = form.fieldsStore.fields.username.errors
-
-      if (!username | username === '') {
-        console.log('')
-      } else {
-        if (!usererror) {
-          // 校验是否重复
-          this.axios(
-            {
-              url: 'checkregister',
-              method: 'post',
-              data: {
-                username: username,
-                identitytype: 'account'
-              },
-              transformRequest: [function (data) {
-                // Do whatever you want to transform the data
-                let ret = ''
-                for (let it in data) {
-                  // 如果要发送中文 编码
-                  ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-                }
-                return ret
-              }],
-              headers: {
-                'Content-Type': 'application/x-www-form-urlencoded'
-              }
-            })
-            .then(function (response) {
-              // 数据库存在重复用户名，校验
-              form.validateFields(['username'], { force: true })
-            })
-            .catch(function (error) {
-              console.log(error)
-              // 不处理
-            })
-        }
-      }
+    validateToNextPassword(rule, value, callback) { // 密码修改后校验确认密码
+      value && this.form.validateFields(['confirmpass'], { force: true })
+      callback()
     },
     checkUsername(rules, value, callback) {
-      if (!value | value === '') { callback(new Error(this.regular.usernameMsg)) } else {
-        const reg = new RegExp(this.regular.username)
-        if (!reg.test(value)) {
-          console.log(this.form)
-          callback(new Error(this.regular.usernameMsg))
-        } else {
-          console.log(rules)
-          callback()
-        }
-      }
+
+      !value && callback(new Error(this.regular.usernameMsg))
+      const reg = new RegExp(this.regular.username)
+      !reg.test(value) && callback(new Error(this.regular.usernameMsg))
+      callback()
     },
     confirmRegister(values) {
       const router = this.$router
@@ -212,37 +134,21 @@ export default {
             username: values.username,
             password: values.userpass,
             identitytype: 'account'
-          },
-          transformRequest: [function (data) {
-            // Do whatever you want to transform the data
-            let ret = ''
-            for (let it in data) {
-              // 如果要发送中文 编码
-              ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-            }
-            return ret
-          }],
-          headers: {
-            'Content-Type': 'application/x-www-form-urlencoded'
           }
         })
-        .then(function (response) {
-          console.log(response)// 登录成功，跳转到欢迎页面
+        .then(result => {
           router.push({ name: 'registerOk', params: { username: values.username } })
         })
-        .catch(function (error) {
-          console.log(error)
-          if (error.code === 466) { // 466用户名注册重复
-            // 校验用户名
-            form.validateFields(['username'], { force: true }, (errors, values) => {
-              form.setFields({
-                username: {
-                  value: values.username,
-                  errors: [new Error(error.msg)]
-                }
-              })
+        .catch(error => {
+          form.validateFields(['username'], { force: true }, (errors, values) => { // 校验用户名
+            form.setFields({
+              username: {
+                value: values.username,
+                errors: [new Error(error.data.message)]
+              }
             })
-          }
+          })
+
         })
     }
   }

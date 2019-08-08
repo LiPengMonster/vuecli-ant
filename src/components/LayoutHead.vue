@@ -59,15 +59,26 @@ export default {
   data() {
     return {
       collapsed: false,
-      visible: false
+      visible: false,
+      count: 0
     }
   },
   created() {
-    const _this = this
     //在页面刷新时将vuex里的信息保存到sessionStorage里
-    if (_this.token && localStorage.getItem('userinfo')) {
-      _this.$store.dispatch("commitadduserinfo", JSON.parse(localStorage.getItem('userinfo')))
+    if (this.token && localStorage.getItem('userinfo')) {
+      this.$store.dispatch("commitadduserinfo", JSON.parse(localStorage.getItem('userinfo')))
     }
+  },
+  mounted() {
+    //创建定时器更新时间
+    // setInterval(() => {
+    //   this.$store.getters.token && this.count++
+    // }, 1000);
+  },
+  beforeDestroy() {
+    //实例销毁前青出于定时器
+    clearInterval();
+
   },
   computed: {
     ...mapState({
@@ -76,8 +87,8 @@ export default {
           return JSON.parse(state.userinfo)
         else
           return undefined
-      }
-    })
+      },
+    }),
   },
   methods: {
 

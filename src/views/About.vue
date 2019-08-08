@@ -62,8 +62,6 @@
       </a-list-item>
     </a-list>
     <a-divider orientation="left">Left Text</a-divider>
-
-    <a-button type="primary" @click="submit">登录</a-button>
   </div>
 </template>
 <script>
@@ -99,11 +97,6 @@ export default {
     })
   },
   methods: {
-    submit() {
-    },
-    handleClick(e) {
-      console.log('click ', e)
-    },
     getData(callback) {
       reqwest({
         url: fakeDataUrl,
@@ -125,12 +118,6 @@ export default {
         })
       })
     },
-    showModal() {
-      this.visible = true
-    },
-    handleOk(e) {
-      this.visible = false
-    },
     callback(key) {
       console.log(key)
     },
@@ -151,13 +138,11 @@ export default {
     },
     beforeUpload(file) {
       const isJPG = file.type === 'image/jpeg'
-      if (!isJPG) {
-        this.$message.error('You can only upload JPG file!')
-      }
+
+      !isJPG && this.$message.error('You can only upload JPG file!')
       const isLt2M = file.size / 1024 / 1024 < 2
-      if (!isLt2M) {
-        this.$message.error('Image must smaller than 2MB!')
-      }
+      !isLt2M && this.$message.error('Image must smaller than 2MB!')
+
       return isJPG && isLt2M
     },
     customRequest(info) {
@@ -168,9 +153,9 @@ export default {
         url: '/uploadfile',
         method: 'post',
         data: formdata
-      }).then((response) => {
-        info.onSuccess(response.data)
-      }).catch((error) => {
+      }).then(result => {
+        info.onSuccess(result)
+      }).catch(error => {
         info.onError(error)
       })
     }

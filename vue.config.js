@@ -1,16 +1,16 @@
 /*
  * @Author: 李鹏
  * @Date: 2018-09-20 20:05:17
- * @Last Modified by: 吴占超
- * @Last Modified time: 2019-06-26 20:16:05
+ * @Last Modified by: 李鹏
+ * @Last Modified time: 2019-08-08 18:59:06
  * vue配置文件
  */
 const path = require('path')
 module.exports = {
   // 基本路径
   // baseUrl: process.env.NODE_ENV === 'production' ? '/' : '/',
-  publicPath: process.env.NODE_ENV === 'production'
-    ? '/' : '/',
+  publicPath: process.env.NODE_ENV === 'production' ?
+    '/' : '/',
 
   // 输出文件目录
   outputDir: '../../../egg/eggcli-build/app/public',
@@ -66,7 +66,6 @@ module.exports = {
       }
     }
   },
-
   chainWebpack: config => {
     const imagesRule = config.module.rule('images')
     imagesRule.uses.clear()

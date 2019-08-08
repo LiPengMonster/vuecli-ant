@@ -22,7 +22,6 @@
                 <i class="login-panel-title-05"></i>
               </div>
             </div>
-
             <!-- 2 -->
             <a-form-item>
               <a-input
@@ -87,20 +86,9 @@
 export default {
   data() {
     return {
-      form: this.form
+      username: undefined,
+      form: this.$form.createForm(this)
     }
-  },
-  computed: {
-    key() {
-      return this.$route.path + Math.random()
-    }
-  },
-  beforeCreate() { // 单页vue开发使用beforeCreate,初始化form
-    this.form = this.$form.createForm(this, {
-      onFieldsChange: (_, changedFields) => { // 添加字段改变事件
-        this.$emit('change', changedFields)
-      }
-    })
   },
   mounted() {
     this.username = this.$route.params.username
@@ -109,59 +97,31 @@ export default {
     handleSubmit(e) { // 登录提交
       e.preventDefault()
       this.form.validateFields((err, values) => { // 校验
-        if (!err) { // 成功
-          this.confirmLogin(values)
-        }
+        !err && this.confirmLogin(values)
       })
     },
     confirmLogin(values) { // 登录
-      this.axios({
+      this.$axios({
         url: '/login',
         method: 'post',
         data: {
           username: values.username,
           userpass: values.userpass,
           identity_type: 'account'
-        },
-        transformRequest: [function (data) {
-          // Do whatever you want to transform the data
-          let ret = ''
-          for (let it in data) {
-            // 如果要发送中文 编码
-            ret += encodeURIComponent(it) + '=' + encodeURIComponent(data[it]) + '&'
-          }
-          return ret
-        }],
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
         }
-      }).then(
-        (response) => {
-          const token = response.data.token
-          const { id, nickname, avatar } = response.data.data.user
-          const { menu } = response.data.data
-          // 获取成功跳转主页面
-          this.$store.dispatch('commitaddtoken', token)
-          this.$store.dispatch('commitaddmenu', menu)
-          this.$store.dispatch('commitadduserinfo', { id, nickname, avatar }).then(() => {
-            this.$router.push({ name: 'about' })// 跳转到欢迎页面
-          }).catch((error) => {
-            console.log(error)
-          })
-        }).catch((error) => {
+      }).then(result => {
+        const { id, nickname, avatar } = result.user
+        // 获取成功跳转主页面
+        this.$store.dispatch('commitaddtoken', result.token)
+        this.$store.dispatch('commitaddmenu', result.menu)
+        this.$store.dispatch('commitadduserinfo', { id, nickname, avatar }).then(() => {
+          this.$router.push({ name: 'about' })// 跳转到欢迎页面
+        }).catch(error => {
           console.log(error)
         })
-    },
-    showModal() {
-      this.visible = true
-    },
-    handleOk(e) {
-      console.log(e)
-      this.visible = false
-    },
-    handleCancel(e) {
-      console.log(e)
-      this.visible = false
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

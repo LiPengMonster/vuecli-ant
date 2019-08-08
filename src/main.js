@@ -29,13 +29,15 @@ import {
   DatePicker,
   Cascader,
   Row,
-  Col
+  Col,
+  Alert,
+  message
 } from 'ant-design-vue'
-// moment.locale('zh-cn')
 
 Vue.component('layouthead', layouthead)
 Vue.component('layoutfooter', layoutfooter)
-// const globalbase = require('./less/global.less')
+
+
 
 Vue.component(Form)
 Vue.component(Button.name, Button)
@@ -61,6 +63,7 @@ Vue.component(DatePicker)
 Vue.component(Cascader)
 Vue.component(Row)
 Vue.component(Col)
+Vue.component(Alert)
 
 
 Vue.use(Form)
@@ -86,38 +89,30 @@ Vue.use(DatePicker)
 Vue.use(Cascader)
 Vue.use(Row)
 Vue.use(Col)
+Vue.use(Alert)
 
 
 Vue.prototype.$Modal = Modal
+Vue.prototype.$message = message
 
+message.config({
+  top: `100px`,
+  duration: 2,
+  maxCount: 3,
+});
 
 Vue.config.productionTip = false
 
 router.beforeEach((to, from, next) => {
-
-  // store.dispatch('commitremovetoken')
-
-  if (to.meta.requiresAuth) { // 判断该路由是否需要登录权限
-    if (store.getters.token) { // 通过vuex state获取当前的token是否存在store.state.token
-      next() // 判断是否访问的登录页面，是的话跳转到欢迎页面
-    } else {
-      next('/login')
-    }
-  } else {
-    if (store.getters.token) { // 通过vuex state获取当前的token是否存在store.state.token
-      if (to.meta.tag === 0) {
-        next()
-      } else {
-        next('/about')
-      }
-    } else {
-      if (to.meta.tag >= 0) {
-        next()
-      } else {
-        next('/login')
-      }
-    }
+  // store.dispatch('commitremovetoken');
+  if (!to.meta.requiresAuth) {
+    return next();
   }
+  if (!store.getters.token) {
+    return next('/login');
+  }
+  return next();
+
 })
 new Vue({
   store,

@@ -3,7 +3,7 @@
     <div class="body-box">
       <div class="body-module">
         <!-- 1 -->
-        <img src="../assets/images/registerok.png" width="46px" height="46px">
+        <img src="../assets/images/registerok.png" width="46px" height="46px" />
         <div style="margin-left:20px;padding-top:10px;">
           <h3 class="login-panel-title" autofocus>
             恭喜您,您的账号:
@@ -38,13 +38,11 @@ export default {
   },
   //这里面可以根据获取到的id进行获取相应数据
   mounted() {
-    // console.log(this.$route.params)
-    let _this = this; // 声明一个变量指向Vue实例this，保证作用域一致
-    _this.username = _this.$route.params.username
-    _this.timer = setInterval(() => {
-      _this.tsecond--;
-      if (_this.tsecond === 0) {
-        _this.$router.push({ path: "/login", params: { username: _this.username } })
+    this.username = this.$route.params.username
+    this.timer = setInterval(() => {
+      this.tsecond--;
+      if (this.tsecond === 0) {
+        this.$router.push({ path: "/login", params: { username: this.username } })
       } // 修改数据date
     }, 1000)
   },

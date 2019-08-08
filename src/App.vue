@@ -77,7 +77,7 @@
 import { mapState } from 'vuex'
 
 export default {
-  data() {
+  data: () => {
     return {
       collapsed: true
     }
@@ -85,14 +85,11 @@ export default {
   created() {
     //在页面刷新时将vuex里的信息保存到sessionStorage里
     // 判断是否有menu数据,没有则查询后台,有则不处理
-    if (this.token && !this.menu) {
-      this.axios.get('/menu')
-        .then(response => this.$store.dispatch("commitaddmenu", response.data.rows)).
-        catch(error => console.log(error))
-    }
-    if (this.token && localStorage.getItem('menuselectkeys')) {
-      this.$store.dispatch("commitaddmenuselectkeys", localStorage.getItem('menuselectkeys'))
-    }
+    this.token && !this.menu && this.axios.get('/menu')
+      .then(result => this.$store.dispatch("commitaddmenu", result.rows)).
+      catch(error => console.log(error))
+    this.token && localStorage.getItem('menuselectkeys') && this.$store.dispatch("commitaddmenuselectkeys", localStorage.getItem('menuselectkeys'))
+    // this.axios.get('/users/' + '108395969969232/2816')
   },
   computed: {
     ...mapState({
@@ -103,8 +100,7 @@ export default {
           return JSON.parse(state.menuselectkeys)
         return [3]
       }
-    }
-    )
+    })
   },
   methods: {
     menuclick(item, key, keyPath) {
